@@ -10,88 +10,102 @@ const theme = createTheme({
     light: {
       palette: {
         primary: {
-          main: "#4CAF50",
-          light: "#4CAF50",
-          dark: "#4CAF50",
-          contrastText: "#fff",
+          main: "#4CAF50", // Leafy Green
+          light: "#A5D6A7", // Soft Olive
+          dark: "#388E3C", // Forest Green
+          contrastText: "#F9F9F6", // Warm White
         },
         secondary: {
-          main: "#FBC02D",
-          light: "#FBC02D",
-          dark: "#FBC02D",
-          contrastText: "#fff",
+          main: "#A5D6A7", // Soft Olive
+          light: "#C8E6C9",
+          dark: "#81C784",
+          contrastText: "#333333", // Charcoal
         },
         error: {
-          main: "#F44336",
-          light: "#ef5350",
-          dark: "#c62828",
-          contrastText: "#fff",
+          main: "#E64A19", // Deep Orange
+          light: "#FF8A65",
+          dark: "#BF360C",
+          contrastText: "#F9F9F6",
         },
         warning: {
-          main: "#FF7A00",
-          light: "#FF9F40",
-          dark: "#CC5500",
-          contrastText: "#fff",
+          main: "#FBC02D", // Golden Yellow
+          light: "#FDD835",
+          dark: "#F57F17",
+          contrastText: "#333333",
         },
         info: {
-          main: "#007BFF",
-          light: "#4DA3FF",
-          dark: "#0056CC",
-          contrastText: "#fff",
+          main: "#A5D6A7", // Soft Olive
+          light: "#C8E6C9",
+          dark: "#81C784",
+          contrastText: "#333333",
         },
         success: {
-          main: "#308242",
-          light: "#1A4424",
-          dark: "#1A4424",
-          contrastText: "#fff",
+          main: "#388E3C", // Forest Green
+          light: "#4CAF50",
+          dark: "#2E7D32",
+          contrastText: "#F9F9F6",
+        },
+        background: {
+          default: "#F9F9F6", // Warm White
+          paper: "#FFFFFF",
         },
         text: {
-          primary: "#1A1A1A",
-          secondary: "#4D4D4D",
+          primary: "#333333", // Charcoal
+          secondary: "#7E7E7E", // Slate Grey
+        },
+        action: {
+          active: "#6D4C41", // Earth Brown for CTA
         },
       },
     },
     dark: {
       palette: {
         primary: {
-          main: "#4CAF50",
-          light: "#4CAF50",
-          dark: "#4CAF50",
-          contrastText: "#fff",
+          main: "#4CAF50", // Leafy Green
+          light: "#A5D6A7", // Soft Olive
+          dark: "#388E3C", // Forest Green
+          contrastText: "#F9F9F6", // Warm White
         },
         secondary: {
-          main: "#FBC02D",
-          light: "#FBC02D",
-          dark: "#FBC02D",
-          contrastText: "#fff",
+          main: "#A5D6A7", // Soft Olive
+          light: "#C8E6C9",
+          dark: "#81C784",
+          contrastText: "#F9F9F6", // Warm White for dark mode
         },
         error: {
-          main: "#F44336",
-          light: "#ef5350",
-          dark: "#c62828",
-          contrastText: "#fff",
+          main: "#E64A19", // Deep Orange
+          light: "#FF8A65",
+          dark: "#BF360C",
+          contrastText: "#F9F9F6",
         },
         warning: {
-          main: "#FF7A00",
-          light: "#FF9F40",
-          dark: "#CC5500",
-          contrastText: "#fff",
+          main: "#FBC02D", // Golden Yellow
+          light: "#FDD835",
+          dark: "#F57F17",
+          contrastText: "#333333",
         },
         info: {
-          main: "#007BFF",
-          light: "#4DA3FF",
-          dark: "#0056CC",
-          contrastText: "#fff",
+          main: "#A5D6A7", // Soft Olive
+          light: "#C8E6C9",
+          dark: "#81C784",
+          contrastText: "#F9F9F6",
         },
         success: {
-          main: "#308242",
-          light: "#1A4424",
-          dark: "#1A4424",
-          contrastText: "#fff",
+          main: "#388E3C", // Forest Green
+          light: "#4CAF50",
+          dark: "#2E7D32",
+          contrastText: "#F9F9F6",
+        },
+        background: {
+          default: "#1A1A1A", // Dark background
+          paper: "#2D2D2D", // Dark paper
         },
         text: {
-          primary: "#FFFFFF",
-          secondary: "#B0B0B0",
+          primary: "#F9F9F6", // Warm White for dark mode
+          secondary: "#B0B0B0", // Light grey for secondary text
+        },
+        action: {
+          active: "#6D4C41", // Earth Brown for CTA
         },
       },
     },
