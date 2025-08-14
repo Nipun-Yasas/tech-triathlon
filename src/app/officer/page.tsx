@@ -32,7 +32,6 @@ import {
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -43,6 +42,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import MapIcon from '@mui/icons-material/Map';
+import GrassIcon from '@mui/icons-material/Grass';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 
 interface CitizenRequest {
   id: string;
@@ -66,6 +69,33 @@ interface AppointmentRequest {
   status: 'scheduled' | 'completed' | 'cancelled' | 'pending';
   department: string;
   location: string;
+}
+
+interface FarmerCrop {
+  id: string;
+  farmerName: string;
+  farmerId: string;
+  cropType: string;
+  quantity: number;
+  unit: string;
+  location: string;
+  district: string;
+  coordinates: { lat: number; lng: number };
+  status: 'ready' | 'not_ready' | 'scheduled' | 'collected';
+  harvestDate: Date;
+  submissionDate: Date;
+  estimatedValue: number;
+  priority: 'high' | 'medium' | 'low';
+  contactNumber: string;
+  farmSize: number;
+}
+
+interface AreaSummary {
+  district: string;
+  readyCrops: number;
+  totalValue: number;
+  mainCropTypes: string[];
+  coordinates: { lat: number; lng: number };
 }
 
 // Officer Loading Animation
@@ -150,6 +180,8 @@ export default function OfficerDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [requests, setRequests] = useState<CitizenRequest[]>([]);
   const [appointments, setAppointments] = useState<AppointmentRequest[]>([]);
+  const [farmerCrops, setFarmerCrops] = useState<FarmerCrop[]>([]);
+  const [areaSummaries, setAreaSummaries] = useState<AreaSummary[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<CitizenRequest | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -235,6 +267,132 @@ export default function OfficerDashboard() {
         status: 'scheduled',
         department: 'Agriculture',
         location: 'AgriLink Center'
+      }
+    ]);
+
+    // Mock farmer crop data
+    setFarmerCrops([
+      {
+        id: 'FC-001',
+        farmerName: 'K.M. Silva',
+        farmerId: 'NIC-123456789V',
+        cropType: 'Rice',
+        quantity: 500,
+        unit: 'kg',
+        location: 'Anuradhapura North',
+        district: 'Anuradhapura',
+        coordinates: { lat: 8.3114, lng: 80.4037 },
+        status: 'ready',
+        harvestDate: new Date('2025-08-10'),
+        submissionDate: new Date('2025-08-12'),
+        estimatedValue: 75000,
+        priority: 'high',
+        contactNumber: '077-1234567',
+        farmSize: 2.5
+      },
+      {
+        id: 'FC-002',
+        farmerName: 'W.P. Fernando',
+        farmerId: 'NIC-987654321V',
+        cropType: 'Vegetables',
+        quantity: 200,
+        unit: 'kg',
+        location: 'Kandy Central',
+        district: 'Kandy',
+        coordinates: { lat: 7.2906, lng: 80.6337 },
+        status: 'ready',
+        harvestDate: new Date('2025-08-14'),
+        submissionDate: new Date('2025-08-14'),
+        estimatedValue: 35000,
+        priority: 'medium',
+        contactNumber: '071-9876543',
+        farmSize: 1.0
+      },
+      {
+        id: 'FC-003',
+        farmerName: 'R.D. Perera',
+        farmerId: 'NIC-456789123V',
+        cropType: 'Coconut',
+        quantity: 1000,
+        unit: 'units',
+        location: 'Gampaha West',
+        district: 'Gampaha',
+        coordinates: { lat: 7.0873, lng: 80.2133 },
+        status: 'scheduled',
+        harvestDate: new Date('2025-08-08'),
+        submissionDate: new Date('2025-08-10'),
+        estimatedValue: 150000,
+        priority: 'high',
+        contactNumber: '078-2468135',
+        farmSize: 3.0
+      },
+      {
+        id: 'FC-004',
+        farmerName: 'M.A. Jayawardena',
+        farmerId: 'NIC-789123456V',
+        cropType: 'Tea',
+        quantity: 300,
+        unit: 'kg',
+        location: 'Nuwara Eliya East',
+        district: 'Nuwara Eliya',
+        coordinates: { lat: 6.9497, lng: 80.7891 },
+        status: 'not_ready',
+        harvestDate: new Date('2025-08-25'),
+        submissionDate: new Date('2025-08-20'),
+        estimatedValue: 45000,
+        priority: 'low',
+        contactNumber: '076-1357924',
+        farmSize: 1.5
+      },
+      {
+        id: 'FC-005',
+        farmerName: 'S.L. Bandara',
+        farmerId: 'NIC-321654987V',
+        cropType: 'Spices',
+        quantity: 50,
+        unit: 'kg',
+        location: 'Matara South',
+        district: 'Matara',
+        coordinates: { lat: 5.9549, lng: 80.5550 },
+        status: 'ready',
+        harvestDate: new Date('2025-08-12'),
+        submissionDate: new Date('2025-08-13'),
+        estimatedValue: 25000,
+        priority: 'medium',
+        contactNumber: '075-8642097',
+        farmSize: 0.8
+      }
+    ]);
+
+    // Mock area summaries
+    setAreaSummaries([
+      {
+        district: 'Anuradhapura',
+        readyCrops: 3,
+        totalValue: 145000,
+        mainCropTypes: ['Rice', 'Vegetables'],
+        coordinates: { lat: 8.3114, lng: 80.4037 }
+      },
+      {
+        district: 'Kandy',
+        readyCrops: 2,
+        totalValue: 80000,
+        mainCropTypes: ['Vegetables', 'Spices'],
+        coordinates: { lat: 7.2906, lng: 80.6337 }
+      },
+      {
+        district: 'Gampaha',
+        readyCrops: 1,
+        totalValue: 150000,
+        mainCropTypes: ['Coconut'],
+        coordinates: { lat: 7.0873, lng: 80.2133 }
+      },
+      {
+        district: 'Matara',
+        readyCrops: 1,
+        totalValue: 25000,
+        mainCropTypes: ['Spices'],
+        coordinates: { lat: 5.9549, lng: 80.5550 }
       }
     ]);
   }, []);
@@ -477,8 +635,8 @@ export default function OfficerDashboard() {
               sx={{ color: '#4CAF50' }}
             />
             <Tab 
-              label="AgriLink Services" 
-              icon={<AgricultureIcon />}
+              label="Crop Pickup Scheduling" 
+              icon={<LocalShippingIcon />}
               sx={{ color: '#FF9800' }}
             />
           </Tabs>
@@ -723,34 +881,268 @@ export default function OfficerDashboard() {
                 </Box>
               )}
 
-              {/* AgriLink Services Tab */}
+              {/* Crop Pickup Scheduling Tab */}
               {activeTab === 2 && (
-                <Box sx={{ 
-                  flex: 1, 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  minHeight: '400px'
-                }}>
-                  <Typography variant="h4" sx={{ color: '#333333', fontWeight: 700, mb: 2 }}>
-                    🌾 AgriLink Services Management
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="h5" sx={{ color: '#333333', fontWeight: 700, mb: 3 }}>
+                    🚚 Crop Pickup Scheduling & Area Management
                   </Typography>
-                  <Typography variant="body1" sx={{ color: '#7E7E7E', mb: 4, maxWidth: '600px' }}>
-                    Agricultural services management interface will be available soon. This section will allow officers to manage crop submissions, fertilizer requests, and agricultural advisory services.
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    startIcon={<AgricultureIcon />}
-                    sx={{
-                      background: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
-                      px: 4,
-                      py: 1.5
-                    }}
-                  >
-                    Access AgriLink Portal
-                  </Button>
+                  
+                  {/* Area Overview Cards */}
+                  <Box sx={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
+                    gap: 2,
+                    mb: 4 
+                  }}>
+                    {areaSummaries.map((area, index) => (
+                      <Grow key={area.district} in={true} timeout={500 + index * 100}>
+                        <Paper sx={{
+                          p: 2,
+                          background: 'rgba(255, 152, 0, 0.1)',
+                          border: '1px solid rgba(255, 152, 0, 0.2)',
+                          borderRadius: 2,
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            transform: 'translateY(-4px)',
+                            boxShadow: '0 8px 24px rgba(255, 152, 0, 0.15)'
+                          }
+                        }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <MapIcon sx={{ color: '#FF9800', mr: 1 }} />
+                            <Typography variant="h6" sx={{ color: '#333333', fontWeight: 600 }}>
+                              {area.district}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ mb: 1 }}>
+                            <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                              Ready Crops: <span style={{ color: '#FF9800', fontWeight: 600 }}>{area.readyCrops}</span>
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                              Total Value: <span style={{ color: '#4CAF50', fontWeight: 600 }}>LKR {area.totalValue.toLocaleString()}</span>
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {area.mainCropTypes.map((crop) => (
+                              <Chip 
+                                key={crop}
+                                label={crop} 
+                                size="small" 
+                                sx={{ 
+                                  backgroundColor: '#FFE0B2',
+                                  color: '#E65100',
+                                  fontSize: '0.7rem'
+                                }}
+                              />
+                            ))}
+                          </Box>
+                        </Paper>
+                      </Grow>
+                    ))}
+                  </Box>
+
+                  {/* Farmers & Crops Table */}
+                  <TableContainer sx={{ 
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    backdropFilter: 'blur(5px)',
+                    borderRadius: 2,
+                    border: '1px solid rgba(255, 152, 0, 0.1)',
+                    maxHeight: '400px',
+                    overflow: 'auto'
+                  }}>
+                    <Table stickyHeader>
+                      <TableHead>
+                        <TableRow sx={{ backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Farmer</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Crop Details</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Location</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Status</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Priority</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Value</TableCell>
+                          <TableCell sx={{ fontWeight: 700, color: '#333333', backgroundColor: 'rgba(255, 152, 0, 0.05)' }}>Actions</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {farmerCrops.map((crop, index) => (
+                          <Grow key={crop.id} in={true} timeout={500 + index * 100}>
+                            <TableRow sx={{
+                              '&:hover': { 
+                                backgroundColor: 'rgba(255, 152, 0, 0.05)',
+                                transform: 'scale(1.01)',
+                                transition: 'all 0.2s ease'
+                              }
+                            }}>
+                              <TableCell>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                  <Avatar sx={{ 
+                                    backgroundColor: crop.status === 'ready' ? '#4CAF50' : crop.status === 'scheduled' ? '#FF9800' : '#9E9E9E', 
+                                    width: 32, 
+                                    height: 32,
+                                    fontSize: '0.8rem'
+                                  }}>
+                                    {crop.farmerName.split(' ').map(n => n[0]).join('')}
+                                  </Avatar>
+                                  <Box>
+                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                      {crop.farmerName}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: '#7E7E7E' }}>
+                                      📞 {crop.contactNumber}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </TableCell>
+                              <TableCell>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                  <GrassIcon sx={{ color: '#4CAF50', fontSize: 16 }} />
+                                  <Box>
+                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                      {crop.cropType}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: '#7E7E7E' }}>
+                                      {crop.quantity} {crop.unit} | {crop.farmSize} acres
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </TableCell>
+                              <TableCell>
+                                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                  {crop.location}
+                                </Typography>
+                                <Typography variant="caption" sx={{ color: '#7E7E7E' }}>
+                                  {crop.district} District
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Chip
+                                  icon={crop.status === 'ready' ? <CheckCircleIcon /> : 
+                                        crop.status === 'scheduled' ? <ScheduleIcon /> : 
+                                        <PendingIcon />}
+                                  label={crop.status.replace('_', ' ')}
+                                  sx={{
+                                    backgroundColor: `${crop.status === 'ready' ? '#4CAF50' : 
+                                                     crop.status === 'scheduled' ? '#FF9800' : 
+                                                     crop.status === 'not_ready' ? '#9E9E9E' : '#F44336'}20`,
+                                    color: crop.status === 'ready' ? '#4CAF50' : 
+                                           crop.status === 'scheduled' ? '#FF9800' : 
+                                           crop.status === 'not_ready' ? '#9E9E9E' : '#F44336',
+                                    fontWeight: 600,
+                                    textTransform: 'capitalize'
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <Chip
+                                  label={crop.priority}
+                                  size="small"
+                                  sx={{
+                                    backgroundColor: `${crop.priority === 'high' ? '#F44336' : 
+                                                     crop.priority === 'medium' ? '#FF9800' : '#4CAF50'}20`,
+                                    color: crop.priority === 'high' ? '#F44336' : 
+                                           crop.priority === 'medium' ? '#FF9800' : '#4CAF50',
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase',
+                                    fontSize: '0.7rem'
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <Typography variant="body2" sx={{ fontWeight: 600, color: '#4CAF50' }}>
+                                  LKR {crop.estimatedValue.toLocaleString()}
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                  {crop.status === 'ready' && (
+                                    <Button
+                                      size="small"
+                                      variant="contained"
+                                      startIcon={<LocalShippingIcon />}
+                                      sx={{
+                                        backgroundColor: '#FF9800',
+                                        color: '#FFFFFF',
+                                        fontSize: '0.7rem',
+                                        '&:hover': { backgroundColor: '#F57C00' }
+                                      }}
+                                    >
+                                      Schedule Pickup
+                                    </Button>
+                                  )}
+                                  {crop.status === 'scheduled' && (
+                                    <Button
+                                      size="small"
+                                      variant="outlined"
+                                      sx={{
+                                        borderColor: '#4CAF50',
+                                        color: '#4CAF50',
+                                        fontSize: '0.7rem'
+                                      }}
+                                    >
+                                      View Schedule
+                                    </Button>
+                                  )}
+                                  <IconButton 
+                                    size="small"
+                                    sx={{ 
+                                      color: '#7E7E7E',
+                                      '&:hover': { backgroundColor: 'rgba(126, 126, 126, 0.1)' }
+                                    }}
+                                  >
+                                    <MoreVertIcon fontSize="small" />
+                                  </IconButton>
+                                </Box>
+                              </TableCell>
+                            </TableRow>
+                          </Grow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+
+                  {/* Action Buttons */}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    gap: 2, 
+                    mt: 3, 
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap'
+                  }}>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                      <Button
+                        variant="contained"
+                        startIcon={<MapIcon />}
+                        sx={{
+                          backgroundColor: '#2196F3',
+                          color: '#FFFFFF',
+                          '&:hover': { backgroundColor: '#1976D2' }
+                        }}
+                      >
+                        View Area Map
+                      </Button>
+                      <Button
+                        variant="contained"
+                        startIcon={<LocalShippingIcon />}
+                        sx={{
+                          backgroundColor: '#FF9800',
+                          color: '#FFFFFF',
+                          '&:hover': { backgroundColor: '#F57C00' }
+                        }}
+                      >
+                        Bulk Schedule Pickups
+                      </Button>
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DescriptionIcon />}
+                      sx={{
+                        borderColor: '#4CAF50',
+                        color: '#4CAF50',
+                        '&:hover': { backgroundColor: '#F1F8E9' }
+                      }}
+                    >
+                      Export Crop Report
+                    </Button>
+                  </Box>
                 </Box>
               )}
             </Box>

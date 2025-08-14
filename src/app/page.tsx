@@ -44,7 +44,7 @@ export default function Home() {
                 >
                   🏛️ Officer Portal
                 </Button>
-                <Button sx={{ color: '#4CAF50', textTransform: 'none' }} component={Link} href="/login">Login</Button>
+                <Button sx={{ color: '#4CAF50', textTransform: 'none' }} component={Link} href="/auth/signin">Login</Button>
                 <Button 
                   variant="contained" 
                   sx={{ 
@@ -54,7 +54,7 @@ export default function Home() {
                     '&:hover': { backgroundColor: '#388E3C' }
                   }}
                   component={Link} 
-                  href="/signup"
+                  href="/auth/signup"
                 >
                   Sign up
                 </Button>
@@ -95,7 +95,7 @@ export default function Home() {
                   variant="contained" 
                   size="large"
                   component={Link}
-                  href="/dashboard"
+                  href="/auth/signup"
                   sx={{ 
                     backgroundColor: '#4CAF50',
                     color: '#F9F9F6',
@@ -103,10 +103,31 @@ export default function Home() {
                     px: 4,
                     py: 1.5,
                     fontSize: '1.1rem',
+                    fontWeight: 600,
+                    mr: 2
+                  }}
+                >
+                  Get Started
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  size="large"
+                  component={Link}
+                  href="/auth/signin"
+                  sx={{ 
+                    borderColor: '#4CAF50',
+                    color: '#4CAF50',
+                    '&:hover': { 
+                      borderColor: '#388E3C',
+                      backgroundColor: 'rgba(76, 175, 80, 0.04)'
+                    },
+                    px: 4,
+                    py: 1.5,
+                    fontSize: '1.1rem',
                     fontWeight: 600
                   }}
                 >
-                  Register
+                  Sign In
                 </Button>
               </Box>
             </Box>
@@ -241,7 +262,7 @@ export default function Home() {
               variant="contained" 
               size="large"
               component={Link}
-              href="/dashboard"
+              href="/auth/signup"
               sx={{ 
                 backgroundColor: '#6D4C41',
                 color: '#F9F9F6',
@@ -251,7 +272,7 @@ export default function Home() {
                 fontSize: '1.1rem'
               }}
             >
-              Start Using Services
+              Join Now
             </Button>
           </Paper>
         </Container>

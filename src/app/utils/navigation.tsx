@@ -4,10 +4,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import FeedbackIcon from '@mui/icons-material/Feedback';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
+import NotificationBadge from '../components/notifications/NotificationBadge';
 
 const NAVIGATION: Navigation = [
   {
@@ -37,20 +36,12 @@ const NAVIGATION: Navigation = [
   {
     segment: 'notifications',
     title: 'Notifications',
-    icon: <NotificationsIcon />,
+    icon: <NotificationBadge />,
   },
   {
     kind: 'divider',
   },
-  {
-    kind: 'header',
-    title: 'Agricultural Services',
-  },
-  {
-    segment: 'agriculture',
-    title: 'AgriLink Portal',
-    icon: <AgricultureIcon />,
-  },
+  
   {
     kind: 'divider',
   },

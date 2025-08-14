@@ -10,24 +10,20 @@ import 'react-calendar/dist/Calendar.css';
 // import QRCode from 'qrcode.react';
 
 // Import required icons
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import FlightIcon from '@mui/icons-material/Flight';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
-import HomeIcon from '@mui/icons-material/Home';
-import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import GrassIcon from '@mui/icons-material/Grass';
+import ScienceIcon from '@mui/icons-material/Science';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import NatureIcon from '@mui/icons-material/Nature';
 
 // Step labels
 const steps = ['Select Department', 'Choose Service', 'Select Date & Time', 'Confirmation'];
 
 // Department data
 const departments = [
-  { id: 1, name: 'Department of Motor Traffic', icon: <DirectionsCarIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
-  { id: 2, name: 'Department of Immigration & Emigration', icon: <FlightIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
-  { id: 3, name: 'Department of Agriculture', icon: <AgricultureIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
-  { id: 4, name: 'Department of Registrar Companies', icon: <BusinessCenterIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
-  { id: 5, name: 'Land Registry Department', icon: <HomeIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
-  { id: 6, name: 'Ministry of Health', icon: <HealthAndSafetyIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
+  { id: 1, name: 'Internal Audit Division', icon: <AssessmentIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
+  { id: 2, name: 'Seed and Planting Material Development Centre (SPMDC)', icon: <NatureIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
+  { id: 3, name: 'Crop Development Department', icon: <GrassIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
+  { id: 4, name: 'Fertilizer Management Department', icon: <ScienceIcon sx={{ fontSize: 40, color: '#4CAF50' }} /> },
 ];
 
 // Service schema validation
@@ -49,21 +45,49 @@ export default function AppointmentBooking() {
   // Available services based on department (in a real app, fetch this based on selected department)
   const getAvailableServices = () => {
     if (selectedDepartment === 1) {
+      // Internal Audit Division
       return [
-        { id: 1, name: 'Driver\'s License Renewal' },
-        { id: 2, name: 'Vehicle Registration' },
-        { id: 3, name: 'License Exam Scheduling' }
+        { id: 1, name: 'Paid Document Section Appointment' },
+        { id: 2, name: 'Revenue Report Section Appointment' },
+        { id: 3, name: 'Running Chart Section Appointment' },
+        { id: 4, name: 'Internal Audit Consultation' },
+        { id: 5, name: 'Financial Document Review' }
       ];
     } else if (selectedDepartment === 2) {
+      // Seed and Planting Material Development Centre (SPMDC)
       return [
-        { id: 1, name: 'Passport Application' },
-        { id: 2, name: 'Visa Extension' }
+        { id: 1, name: 'Government Seed Sales Center Visit' },
+        { id: 2, name: 'Planting Material Purchase' },
+        { id: 3, name: 'Seed Quality Testing' },
+        { id: 4, name: 'Agricultural Material Consultation' },
+        { id: 5, name: 'Seed Potato Store Visit' },
+        { id: 6, name: 'Bean Seeds Center Appointment' },
+        { id: 7, name: 'Vegetable Seeds Center Visit' }
       ];
     } else if (selectedDepartment === 3) {
+      // Crop Development Department
       return [
-        { id: 1, name: 'Crop Submission' },
-        { id: 2, name: 'Fertilizer Request' },
-        { id: 3, name: 'Agricultural Consultation' }
+        { id: 1, name: 'Rice Crop Submission' },
+        { id: 2, name: 'Vegetable Crop Submission' },
+        { id: 3, name: 'Fruit Crop Submission' },
+        { id: 4, name: 'Spice Crop Submission' },
+        { id: 5, name: 'Tea Crop Submission' },
+        { id: 6, name: 'Coconut Crop Submission' },
+        { id: 7, name: 'Rubber Crop Submission' },
+        { id: 8, name: 'Sugarcane Crop Submission' }
+      ];
+    } else if (selectedDepartment === 4) {
+      // Fertilizer Management Department
+      return [
+        { id: 1, name: 'Organic Fertilizer Request' },
+        { id: 2, name: 'Chemical Fertilizer Request' },
+        { id: 3, name: 'NPK Fertilizer Request' },
+        { id: 4, name: 'Urea Fertilizer Request' },
+        { id: 5, name: 'Phosphate Fertilizer Request' },
+        { id: 6, name: 'Potash Fertilizer Request' },
+        { id: 7, name: 'Micronutrient Fertilizer Request' },
+        { id: 8, name: 'Liquid Fertilizer Request' },
+        { id: 9, name: 'Soil Testing & Fertilizer Recommendation' }
       ];
     } else {
       return [];
@@ -145,8 +169,10 @@ export default function AppointmentBooking() {
             
             <Box sx={{ 
               display: 'grid', 
-              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
-              gap: 3 
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+              gap: 3,
+              maxWidth: '800px',
+              mx: 'auto'
             }}>
               {departments.map((dept) => (
                 <Card 
