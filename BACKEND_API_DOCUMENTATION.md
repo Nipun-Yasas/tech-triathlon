@@ -1,13 +1,41 @@
-# Tech Triathlon - Backend API Documentation
+# AgriLink Backend API Documentation
 
-## 📋 **Project Overview**
-Tech Triathlon is an agricultural platform that connects farmers with officers for crop submission, review, and fertilizer distribution management. This document outlines all the backend APIs required for the platform.
+## Overview
+This document describes the backend API endpoints for the AgriLink agricultural management system.
 
----
+## Authentication
+The API uses JWT (JSON Web Tokens) for authentication. Tokens can be sent in:
+- Authorization header: `Bearer <token>`
+- HTTP-only cookies: `token=<token>`
 
-## 🏗️ **Architecture Overview**
+## Base URL
+- Development: `http://localhost:3000/api`
 
-### **Tech Stack Recommendations**
+## Data Models
+
+### User
+- `id`: ObjectId
+- `firstName`: String (required)
+- `lastName`: String (required)
+- `email`: String (required, unique)
+- `password`: String (required, hashed)
+- `userType`: 'farmer' | 'officer' (required)
+- `phone`: String (optional)
+- `isActive`: Boolean (default: true)
+- `lastLogin`: Date (optional)
+- `createdAt`: Date
+- `updatedAt`: Date
+
+### Farmer Profile
+- `userId`: ObjectId (ref: User)
+- `farmLocation`: Object (address, district, province, coordinates)
+- `farmSize`: Number (acres)
+- `cropTypes`: Array of strings
+- `farmingExperience`: Number (years)
+- `governmentId`: String (unique)
+- `bankDetails`: Object (optional)
+- `profileImage`: String (optional)
+- `isVerified`: Boolean (default: false)
 - **Backend Framework**: Node.js with Express.js / Python with FastAPI / Java Spring Boot
 - **Database**: PostgreSQL (primary) + Redis (caching)
 - **Authentication**: JWT tokens with refresh token mechanism
