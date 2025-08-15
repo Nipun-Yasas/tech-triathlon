@@ -112,7 +112,9 @@ export default function SignUpPage() {
           lastName: formData.lastName,
           email: formData.email,
           password: formData.password,
-          confirmPassword: formData.confirmPassword
+          confirmPassword: formData.confirmPassword,
+          userType: formData.userType,
+          phone: formData.phone
         }),
       });
       const data = await res.json();
