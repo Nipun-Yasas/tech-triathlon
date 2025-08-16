@@ -96,7 +96,7 @@ export default function SignInPage() {
       <Box
         sx={{
           minHeight: '100vh',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 40%, #a5d6a7 80%, #fff 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
