@@ -46,7 +46,16 @@ export default function SignUpPage() {
     confirmPassword: '',
     userType: '',
     phone: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    // Farm-specific fields (shown only when userType is 'farmer')
+    farmLocation: {
+      province: '',
+      district: '',
+      address: ''
+    },
+    farmSize: '',
+    farmingExperience: '',
+    governmentId: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -55,35 +64,102 @@ export default function SignUpPage() {
 
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = field === 'agreeToTerms' ? event.target.checked : event.target.value;
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    
+    // Handle nested farm location fields
+    if (field.startsWith('farmLocation.')) {
+      const locationField = field.split('.')[1];
+      setFormData(prev => ({
+        ...prev,
+        farmLocation: {
+          ...prev.farmLocation,
+          [locationField]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+    
     if (toast.open) setToast({ ...toast, open: false });
   };
 
   const handleSelectChange = (field: string) => (event: { target: { value: unknown } }) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: event.target.value
-    }));
+    const value = event.target.value;
+    
+    // Handle nested farm location fields
+    if (field.startsWith('farmLocation.')) {
+      const locationField = field.split('.')[1];
+      setFormData(prev => ({
+        ...prev,
+        farmLocation: {
+          ...prev.farmLocation,
+          [locationField]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+    
     if (toast.open) setToast({ ...toast, open: false });
   };
 
   const validateForm = () => {
-    if (!formData.firstName || !formData.lastName || !formData.email || 
-        !formData.password || !formData.confirmPassword || !formData.userType) {
-      return 'Please fill in all required fields';
+    // Required fields validation
+    if (!formData.firstName?.trim()) return 'First name is required';
+    if (!formData.lastName?.trim()) return 'Last name is required';
+    if (!formData.email?.trim()) return 'Email is required';
+    if (!formData.password) return 'Password is required';
+    if (!formData.confirmPassword) return 'Password confirmation is required';
+    if (!formData.userType) return 'Please select account type';
+
+    // Farm-specific validation for farmers
+    if (formData.userType === 'farmer') {
+      if (!formData.farmLocation.province) return 'Province is required for farmers';
+      if (!formData.farmLocation.district?.trim()) return 'District is required for farmers';
+      if (!formData.farmLocation.address?.trim()) return 'Farm address is required for farmers';
+      if (!formData.farmSize || parseFloat(formData.farmSize) <= 0) return 'Valid farm size is required for farmers';
+      if (!formData.farmingExperience || parseFloat(formData.farmingExperience) < 0) return 'Farming experience is required for farmers';
+      if (!formData.governmentId?.trim()) return 'Government ID is required for farmers';
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      return 'Please enter a valid email address';
+    }
+
+    // Password validation
+    if (formData.password.length < 6) {
+      return 'Password must be at least 6 characters long';
     }
 
     if (formData.password !== formData.confirmPassword) {
       return 'Passwords do not match';
     }
 
-    if (formData.password.length < 6) {
-      return 'Password must be at least 6 characters long';
+    // Strong password validation
+    const hasUpperCase = /[A-Z]/.test(formData.password);
+    const hasLowerCase = /[a-z]/.test(formData.password);
+    const hasNumbers = /\d/.test(formData.password);
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+      return 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
     }
 
+    // Phone validation (if provided)
+    if (formData.phone && formData.phone.length > 0) {
+      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+      if (!phoneRegex.test(formData.phone.replace(/[\s\-\(\)]/g, ''))) {
+        return 'Please enter a valid phone number';
+      }
+    }
+
+    // Terms agreement
     if (!formData.agreeToTerms) {
       return 'Please agree to the Terms of Service and Privacy Policy';
     }
@@ -104,30 +180,88 @@ export default function SignUpPage() {
     }
 
     try {
+      const requestBody: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        confirmPassword: string;
+        userType: string;
+        phone?: string;
+        farmData?: {
+          farmLocation: {
+            province: string;
+            district: string;
+            address: string;
+          };
+          farmSize: number;
+          farmingExperience: number;
+          governmentId: string;
+        };
+      } = {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.toLowerCase().trim(),
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        userType: formData.userType,
+        phone: formData.phone?.trim() || undefined
+      };
+
+      // Add farm data for farmers
+      if (formData.userType === 'farmer') {
+        requestBody.farmData = {
+          farmLocation: {
+            province: formData.farmLocation.province,
+            district: formData.farmLocation.district.trim(),
+            address: formData.farmLocation.address.trim()
+          },
+          farmSize: parseFloat(formData.farmSize),
+          farmingExperience: parseFloat(formData.farmingExperience),
+          governmentId: formData.governmentId.trim()
+        };
+      }
+
       const res = await fetch("/api/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-          userType: formData.userType,
-          phone: formData.phone
-        }),
+        headers: { 
+          "Content-Type": "application/json",
+        },
+        credentials: 'include', // Important for cookies
+        body: JSON.stringify(requestBody),
       });
+      
       const data = await res.json();
+      
       if (!res.ok) {
-        setToast({ open: true, message: data.error || 'Registration failed. Please try again.', severity: 'error' });
+        // Handle specific error cases
+        switch (res.status) {
+          case 409:
+            setToast({ open: true, message: 'An account with this email already exists. Please sign in instead.', severity: 'error' });
+            break;
+          case 400:
+            setToast({ open: true, message: data.error || 'Invalid registration data', severity: 'error' });
+            break;
+          default:
+            setToast({ open: true, message: data.error || 'Registration failed. Please try again.', severity: 'error' });
+        }
       } else {
-        setToast({ open: true, message: data.message || 'Registration successful.', severity: 'success' });
+        setToast({ open: true, message: data.message || 'Registration successful! Redirecting to sign in...', severity: 'success' });
+        
+        // Store user data temporarily for the signin page
+        sessionStorage.setItem('newUser', JSON.stringify({
+          email: formData.email.toLowerCase().trim(),
+          userType: formData.userType,
+          name: `${formData.firstName} ${formData.lastName}`
+        }));
+        
         setTimeout(() => {
           router.push('/auth/signin?registered=true');
-        }, 1200);
+        }, 1500);
       }
-    } catch {
-      setToast({ open: true, message: 'Registration failed. Please try again.', severity: 'error' });
+    } catch (error) {
+      console.error('Registration error:', error);
+      setToast({ open: true, message: 'Network error. Please check your connection and try again.', severity: 'error' });
     } finally {
       setLoading(false);
     }
@@ -350,6 +484,89 @@ export default function SignUpPage() {
                   </MenuItem>
                 </Select>
               </FormControl>
+
+              {/* Farm-specific fields (only show for farmers) */}
+              {formData.userType === 'farmer' && (
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+                    Farm Information
+                  </Typography>
+                  
+                  <FormControl fullWidth sx={{ mb: 2 }}>
+                    <InputLabel>Province</InputLabel>
+                    <Select
+                      value={formData.farmLocation.province}
+                      label="Province"
+                      onChange={handleSelectChange('farmLocation.province')}
+                      sx={{ borderRadius: 2 }}
+                    >
+                      <MenuItem value="Western">Western Province</MenuItem>
+                      <MenuItem value="Central">Central Province</MenuItem>
+                      <MenuItem value="Southern">Southern Province</MenuItem>
+                      <MenuItem value="Northern">Northern Province</MenuItem>
+                      <MenuItem value="Eastern">Eastern Province</MenuItem>
+                      <MenuItem value="North Western">North Western Province</MenuItem>
+                      <MenuItem value="North Central">North Central Province</MenuItem>
+                      <MenuItem value="Uva">Uva Province</MenuItem>
+                      <MenuItem value="Sabaragamuwa">Sabaragamuwa Province</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      fullWidth
+                      label="District"
+                      value={formData.farmLocation.district}
+                      onChange={handleInputChange('farmLocation.district')}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                      placeholder="Enter your district"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Farm Size (acres)"
+                      type="number"
+                      value={formData.farmSize}
+                      onChange={handleInputChange('farmSize')}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                      placeholder="e.g., 5"
+                    />
+                  </Stack>
+
+                  <TextField
+                    fullWidth
+                    label="Farm Address"
+                    value={formData.farmLocation.address}
+                    onChange={handleInputChange('farmLocation.address')}
+                    sx={{ 
+                      mb: 2,
+                      '& .MuiOutlinedInput-root': { borderRadius: 2 }
+                    }}
+                    placeholder="Enter your farm address"
+                    multiline
+                    rows={2}
+                  />
+
+                  <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      fullWidth
+                      label="Farming Experience (years)"
+                      type="number"
+                      value={formData.farmingExperience}
+                      onChange={handleInputChange('farmingExperience')}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                      placeholder="e.g., 10"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Government ID Number"
+                      value={formData.governmentId}
+                      onChange={handleInputChange('governmentId')}
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                      placeholder="NIC or other ID"
+                    />
+                  </Stack>
+                </Box>
+              )}
 
               {/* Password */}
               <TextField
