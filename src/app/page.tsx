@@ -133,7 +133,7 @@ export default function Home() {
       {/* Hero Section */}
       <Box
         sx={{
-          backgroundColor: '#F9F9F6',
+          backgroundColor: '#fff',
           py: 12,
           position: 'relative',
           overflow: 'hidden',
@@ -237,7 +237,7 @@ export default function Home() {
       </Box>
 
       {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="" sx={{ py: 8 ,backgroundColor: '#A5D6A7'}} >
         <Typography variant="h3" component="h2" align="center" gutterBottom sx={{ mb: 6, color: '#333333' }}>
           Check Out Our Features
         </Typography>
@@ -335,7 +335,156 @@ export default function Home() {
           </Card>
         </Box>
       </Container>
-
+      {/* Testimonial Section */}
+      <Box sx={{ backgroundColor: '#fff', py: 10 }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{ fontWeight: 600, mb: 1, color: '#333333', letterSpacing: 1 }}
+          >
+            TESTIMONIAL
+          </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{ fontWeight: 700, mb: 6, color: '#222', lineHeight: 1.3 }}
+          >
+            Creating A Community Of<br />Life Long Learners.
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 4,
+              justifyContent: 'center',
+              mb: 8,
+            }}
+          >
+            {/* Testimonial Card 1 */}
+            <Paper
+              elevation={0}
+              sx={{
+                flex: 1,
+                p: 3,
+                backgroundColor: '#E8F5E9',
+                borderRadius: 3,
+                minWidth: 250,
+              }}
+            >
+              <Box sx={{ fontSize: 32, color: '#B0BEC5', mb: 1 }}>“</Box>
+              <Typography sx={{ color: '#333', mb: 2 }}>
+                "Lorem ipsum dolor sit amet, elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cred nulla pariatur excepteur sint."
+              </Typography>
+              <Typography sx={{ fontWeight: 700, color: '#388E3C' }}>Kathy Sullivan</Typography>
+              <Typography variant="body2" sx={{ color: '#7E7E7E' }}>CEO at oxdent.in</Typography>
+            </Paper>
+            {/* Testimonial Card 2 */}
+            <Paper
+              elevation={0}
+              sx={{
+                flex: 1,
+                p: 3,
+                backgroundColor: '#E8F5E9',
+                borderRadius: 3,
+                minWidth: 250,
+              }}
+            >
+              <Box sx={{ fontSize: 32, color: '#B0BEC5', mb: 1 }}>“</Box>
+              <Typography sx={{ color: '#333', mb: 2 }}>
+                "Lorem ipsum dolor sit amet, elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cred nulla pariatur excepteur sint."
+              </Typography>
+              <Typography sx={{ fontWeight: 700, color: '#388E3C' }}>Elsie Stroud</Typography>
+              <Typography variant="body2" sx={{ color: '#7E7E7E' }}>CEO at oxdent.in</Typography>
+            </Paper>
+            {/* Testimonial Card 3 */}
+            <Paper
+              elevation={0}
+              sx={{
+                flex: 1,
+                p: 3,
+                backgroundColor: '#E8F5E9',
+                borderRadius: 3,
+                minWidth: 250,
+              }}
+            >
+              <Box sx={{ fontSize: 32, color: '#B0BEC5', mb: 1 }}>“</Box>
+              <Typography sx={{ color: '#333', mb: 2 }}>
+                "Lorem ipsum dolor sit amet, elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cred nulla pariatur excepteur sint."
+              </Typography>
+              <Typography sx={{ fontWeight: 700, color: '#388E3C' }}>Kathy Sullivan</Typography>
+              <Typography variant="body2" sx={{ color: '#7E7E7E' }}>CEO at oxdent.in</Typography>
+            </Paper>
+          </Box>
+          {/* Stats Section */}
+          <Box
+            sx={{
+              backgroundColor: '#F9F9F6',
+              borderRadius: 3,
+              p: { xs: 3, md: 5 },
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { md: 'center' },
+              gap: 4,
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box sx={{ flex: 2 }}>
+              <Typography variant="h6" sx={{ color: '#333', fontWeight: 500 }}>
+                Helping Local Farming
+              </Typography>
+              <Typography variant="h5" sx={{ color: '#388E3C', fontWeight: 700, mb: 1 }}>
+                Thrive in the Digital Age
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                Built on Hard Work, Grown with Dedication
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                flex: 3,
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
+                gap: 3,
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ color: '#388E3C', fontWeight: 700 }}>
+                  2,245
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                  Farmers Connected
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ color: '#388E3C', fontWeight: 700 }}>
+                  1,098
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                  Pickup Scheduled
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ color: '#388E3C', fontWeight: 700 }}>
+                  28,867
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                  Price Alerts Sent
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ color: '#388E3C', fontWeight: 700 }}>
+                  10,342
+                </Typography>
+                <Typography variant="body2" sx={{ color: '#7E7E7E' }}>
+                  Notifications
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
       {/* Call to Action Section */}
       <Box sx={{ backgroundColor: '#A5D6A7', py: 8 }}>
         <Container maxWidth="md">
