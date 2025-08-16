@@ -6,97 +6,183 @@ import { Box, Button, Container, Typography, Card, CardContent, Paper, AppBar, T
 import Link from 'next/link';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
+import Image from 'next/image';
+// Use MUI SvgIcon for custom SVG, or use next/image for static images in /public
+function AgricultureIcon(props: Omit<React.ComponentProps<typeof Image>, 'src'>) {
+  return (
+    <Image
+      src="/logo.svg"
+      width={props.width ?? 50}
+      height={props.height ?? 50}
+      {...props}
+      style={{ display: 'inline-block', verticalAlign: 'middle', ...props.style }}
+    />
+  );
+}
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 export default function Home() {
   return (
     <Box component="main">
-      {/* Navigation Bar */}
-      <AppBar position="static" elevation={0} sx={{ backgroundColor: '#F9F9F6', borderBottom: '2px solid #4CAF50' }}>
+      {/* Responsive Navigation Bar */}
+      <AppBar
+        position="static"
+        elevation={0}
+        color='transparent'
+        sx={{
+          backgroundColor: '#fff',
+          borderBottom: '2px solid black',
+          boxShadow: 'none',
+        }}
+      >
         <Container maxWidth="lg">
-          <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Toolbar
+            disableGutters
+            sx={{
+              justifyContent: 'space-between',
+              minHeight: { xs: 56, sm: 64 },
+              px: { xs: 1, sm: 2 },
+            }}
+          >
+            {/* Logo */}
+            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
               <AgricultureIcon sx={{ color: '#4CAF50', mr: 1, fontSize: 28 }} />
-              <Typography variant="h6" sx={{ color: '#333333', fontWeight: 700 }}>
-                AgriLink
-              </Typography>
+             
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/">Home</Button>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/services">Service</Button>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/features">Feature</Button>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/products">Product</Button>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/testimonial">Testimonial</Button>
-              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/faq">FAQ</Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Button sx={{ color: '#333333', textTransform: 'none' }}>US ↓</Button>
-                <Button 
-                  sx={{ 
-                    color: '#1976D2', 
-                    textTransform: 'none',
-                    border: '1px solid #1976D2',
-                    px: 2,
-                    '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.1)' }
-                  }} 
-                  component={Link} 
-                  href="/officer"
-                >
-                  🏛️ Officer Portal
-                </Button>
-                <Button sx={{ color: '#4CAF50', textTransform: 'none' }} component={Link} href="/auth/signin">Login</Button>
-                <Button 
-                  variant="contained" 
-                  sx={{ 
-                    backgroundColor: '#4CAF50', 
-                    color: 'white',
-                    textTransform: 'none',
-                    '&:hover': { backgroundColor: '#388E3C' }
-                  }}
-                  component={Link} 
-                  href="/auth/signup"
-                >
-                  Sign up
-                </Button>
-              </Box>
+            {/* Desktop Menu */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                alignItems: 'center',
+                gap: 2,
+                flexGrow: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/">
+                Home
+              </Button>
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/services">
+                Service
+              </Button>
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/features">
+                Feature
+              </Button>
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/products">
+                Product
+              </Button>
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/testimonial">
+                Testimonial
+              </Button>
+              <Button sx={{ color: '#333333', textTransform: 'none' }} component={Link} href="/faq">
+                FAQ
+              </Button>
+            </Box>
+            {/* Actions */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                alignItems: 'center',
+                gap: 1.5,
+                ml: 2,
+              }}
+            >
+              <Button sx={{ color: '#333333', textTransform: 'none' }}>US ↓</Button>
+              <Button
+                sx={{
+                  color: '#1976D2',
+                  textTransform: 'none',
+                  border: '1px solid #1976D2',
+                  px: 2,
+                  fontWeight: 500,
+                  borderRadius: 2,
+                  '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.1)' },
+                }}
+                component={Link}
+                href="/officer"
+              >
+                🏛️ Officer Portal
+              </Button>
+              <Button sx={{ color: '#4CAF50', textTransform: 'none' }} component={Link} href="/auth/signin">
+                Login
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: '#4CAF50',
+                  color: 'white',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderRadius: 2,
+                  px: 3,
+                  '&:hover': { backgroundColor: '#388E3C' },
+                }}
+                component={Link}
+                href="/auth/signup"
+              >
+                Sign up
+              </Button>
+            </Box>
+            {/* Mobile Menu */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+              <MobileNav />
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
       {/* Hero Section */}
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           backgroundColor: '#F9F9F6',
           py: 12,
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
       >
         <Container maxWidth="lg">
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-            <Box sx={{ flex: '1 1 400px', minWidth: 400 }}>
-              <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' } }}>
+            <Box sx={{ flex: '1 1 400px', minWidth: 300 }}>
+              <Typography
+                variant="h2"
+                component="h1"
+                gutterBottom
+                sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' } }}
+              >
                 Connecting Farmers,
               </Typography>
-              <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' }, color: '#333333' }}>
+              <Typography
+                variant="h2"
+                component="h1"
+                gutterBottom
+                sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' }, color: '#333333' }}
+              >
                 Government & Logistics
               </Typography>
-              <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' }, color: '#4CAF50' }}>
+              <Typography
+                variant="h2"
+                component="h1"
+                gutterBottom
+                sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '3rem' }, color: '#4CAF50' }}
+              >
                 One Harvest At A Time
               </Typography>
-              
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.7, mt: 3, mb: 4, color: '#7E7E7E' }}>
+
+              <Typography
+                variant="body1"
+                paragraph
+                sx={{ fontSize: '1.1rem', lineHeight: 1.7, mt: 3, mb: 4, color: '#7E7E7E' }}
+              >
                 Real-time harvest tracking, fair pricing, and smarter logistics to prevent crop
                 waste and empower every farmer.
               </Typography>
-              
+
               <Box sx={{ mt: 4 }}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   size="large"
                   component={Link}
                   href="/auth/signup"
-                  sx={{ 
+                  sx={{
                     backgroundColor: '#4CAF50',
                     color: '#F9F9F6',
                     '&:hover': { backgroundColor: '#388E3C' },
@@ -104,27 +190,29 @@ export default function Home() {
                     py: 1.5,
                     fontSize: '1.1rem',
                     fontWeight: 600,
-                    mr: 2
+                    mr: 2,
+                    borderRadius: 2,
                   }}
                 >
                   Get Started
                 </Button>
-                <Button 
-                  variant="outlined" 
+                <Button
+                  variant="outlined"
                   size="large"
                   component={Link}
                   href="/auth/signin"
-                  sx={{ 
+                  sx={{
                     borderColor: '#4CAF50',
                     color: '#4CAF50',
-                    '&:hover': { 
+                    '&:hover': {
                       borderColor: '#388E3C',
-                      backgroundColor: 'rgba(76, 175, 80, 0.04)'
+                      backgroundColor: 'rgba(76, 175, 80, 0.04)',
                     },
                     px: 4,
                     py: 1.5,
                     fontSize: '1.1rem',
-                    fontWeight: 600
+                    fontWeight: 600,
+                    borderRadius: 2,
                   }}
                 >
                   Sign In
@@ -132,7 +220,7 @@ export default function Home() {
               </Box>
             </Box>
             <Box sx={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center' }}>
-              <Box 
+              <Box
                 component="img"
                 src="/hero img.svg"
                 alt="Farmers connecting with government and logistics"
@@ -140,7 +228,7 @@ export default function Home() {
                   width: '100%',
                   maxWidth: '500px',
                   height: 'auto',
-                  objectFit: 'contain'
+                  objectFit: 'contain',
                 }}
               />
             </Box>
@@ -323,5 +411,128 @@ export default function Home() {
         </Container>
       </Box>
     </Box>
+  );
+}
+
+// MobileNav component
+function MobileNav() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <Button
+        aria-label="menu"
+        onClick={() => setOpen(true)}
+        sx={{
+          minWidth: 0,
+          p: 1,
+          color: '#4CAF50',
+        }}
+      >
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+          <rect y="4" width="24" height="2" rx="1" fill="#4CAF50" />
+          <rect y="11" width="24" height="2" rx="1" fill="#4CAF50" />
+          <rect y="18" width="24" height="2" rx="1" fill="#4CAF50" />
+        </svg>
+      </Button>
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          width: 260,
+          height: '100vh',
+          bgcolor: '#F9F9F6',
+          boxShadow: 6,
+          zIndex: 1300,
+          transform: open ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s cubic-bezier(.4,0,.2,1)',
+          display: 'flex',
+          flexDirection: 'column',
+          p: 3,
+        }}
+        role="presentation"
+        onClick={() => setOpen(false)}
+        onKeyDown={() => setOpen(false)}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <AgricultureIcon sx={{ color: '#4CAF50', mr: 1, fontSize: 28 }} />
+          <Typography variant="h6" sx={{ color: '#333333', fontWeight: 700 }}>
+            AgriLink
+          </Typography>
+        </Box>
+        <Button component={Link} href="/" sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>
+          Home
+        </Button>
+        <Button component={Link} href="/services" sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>
+          Service
+        </Button>
+        <Button component={Link} href="/features" sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>
+          Feature
+        </Button>
+        <Button component={Link} href="/products" sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>
+          Product
+        </Button>
+        <Button component={Link} href="/testimonial" sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>
+          Testimonial
+        </Button>
+        <Button component={Link} href="/faq" sx={{ color: '#333', justifyContent: 'flex-start', mb: 2 }}>
+          FAQ
+        </Button>
+        <Button sx={{ color: '#333333', textTransform: 'none', mb: 1 }}>US ↓</Button>
+        <Button
+          sx={{
+            color: '#1976D2',
+            textTransform: 'none',
+            border: '1px solid #1976D2',
+            px: 2,
+            fontWeight: 500,
+            borderRadius: 2,
+            mb: 1,
+          }}
+          component={Link}
+          href="/officer"
+        >
+          🏛️ Officer Portal
+        </Button>
+        <Button
+          sx={{ color: '#4CAF50', textTransform: 'none', mb: 1 }}
+          component={Link}
+          href="/auth/signin"
+        >
+          Login
+        </Button>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            textTransform: 'none',
+            fontWeight: 600,
+            borderRadius: 2,
+            px: 3,
+            mb: 1,
+          }}
+          component={Link}
+          href="/auth/signup"
+        >
+          Sign up
+        </Button>
+      </Box>
+      {/* Overlay */}
+      {open && (
+        <Box
+          onClick={() => setOpen(false)}
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0,0,0,0.15)',
+            zIndex: 1200,
+          }}
+        />
+      )}
+    </>
   );
 }
