@@ -54,7 +54,7 @@ const UserMenu: React.FC = () => {
               fontWeight: 700,
             }}
           >
-            {user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}` : 'U'}
+            {/* {user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}` : 'U'} */}
           </Avatar>
           <Typography
             variant="body1"
@@ -62,7 +62,7 @@ const UserMenu: React.FC = () => {
             fontFamily="'Poppins-Medium', Helvetica"
             fontWeight={500}
           >
-            {user ? `${user.firstName} ${user.lastName}` : 'User'}
+            {/* {user ? `${user.firstName} ${user.lastName}` : 'User'} */}
           </Typography>
           <KeyboardArrowDownIcon
             sx={{

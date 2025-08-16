@@ -36,7 +36,7 @@ import {
   Backdrop
 } from '@mui/material';
 import Link from 'next/link';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { useNotifications } from '../../../contexts/NotificationContext';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import FolderIcon from '@mui/icons-material/Folder';

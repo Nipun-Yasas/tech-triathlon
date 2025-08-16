@@ -8,7 +8,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import NotificationBadge from '../components/notifications/NotificationBadge';
 
-const NAVIGATION: Navigation = [
+const FARMERNAVIGATION: Navigation = [
   {
     kind: 'header',
     title: 'Citizen Portal',
@@ -41,10 +41,6 @@ const NAVIGATION: Navigation = [
   {
     kind: 'divider',
   },
-  
-  {
-    kind: 'divider',
-  },
   {
     kind: 'header',
     title: 'System',
@@ -61,4 +57,4 @@ const NAVIGATION: Navigation = [
   },
 ];
 
-export default NAVIGATION;
+export default FARMERNAVIGATION;

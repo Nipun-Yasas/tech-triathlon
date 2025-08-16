@@ -10,7 +10,7 @@ import ScienceIcon from '@mui/icons-material/Science';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const OFFICER_NAVIGATION: Navigation = [
+const OFFICERNAVIGATION: Navigation = [
   
   {
     segment: 'officer',
@@ -65,4 +65,4 @@ const OFFICER_NAVIGATION: Navigation = [
   },
 ];
 
-export default OFFICER_NAVIGATION;
+export default OFFICERNAVIGATION;

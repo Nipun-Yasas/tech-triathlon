@@ -3,9 +3,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import { NextAppProvider } from "@toolpad/core/nextjs";
-import NAVIGATION from "./utils/navigation";
-import theme from "../theme";
+import ClientThemeProvider from "./components/ClientThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +26,10 @@ export default function RootLayout({
       <body suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <NextAppProvider navigation={NAVIGATION} theme={theme}>
-        {children}
-       </NextAppProvider>
+        <ClientThemeProvider>
+         {children}
+        </ClientThemeProvider>
+       
       </body>
     </html>
   );

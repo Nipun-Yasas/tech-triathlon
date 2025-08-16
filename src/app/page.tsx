@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {
   Box, Button, Container, Typography, Card, CardContent, Paper, AppBar, Toolbar,
 } from '@mui/material';
+import { ThemeSwitcher } from '@toolpad/core';
 import Link from 'next/link';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -13,7 +14,7 @@ import OfficerPortalButton from './components/auth/OfficerPortalButton';
 import ClientThemeProvider from './components/ClientThemeProvider';
 
 // Logo/Image Icon
-function AgricultureIcon({ width = 50, height = 50, alt = "GovConnect Logo", style, ...rest }: any) {
+function AgricultureIcon({ width = 50, height = 50, alt = "AgriLink Logo", style, ...rest }: any) {
   return (
     <Image
       src="/logo.svg"
@@ -49,7 +50,7 @@ function MobileNav() {
         onKeyDown={() => setOpen(false)}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <AgricultureIcon width={28} height={28} alt="GovConnect Logo" style={{ marginRight: 8 }} />
+          <AgricultureIcon width={28} height={28} alt="AgriLink Logo" style={{ marginRight: 8 }} />
           <Typography variant="h6" sx={{ color: '#333333', fontWeight: 700 }}>AgriLink</Typography>
         </Box>
         {[
@@ -74,6 +75,7 @@ function MobileNav() {
             width: '100%'
           }}
         />
+        <ThemeSwitcher/>hh
         <Button sx={{ color: '#4CAF50', textTransform: 'none', mb: 1 }} component={Link} href="/auth/signin">Login</Button>
         <Button variant="contained" sx={{ backgroundColor: '#4CAF50', color: 'white', textTransform: 'none', fontWeight: 600, borderRadius: 2, px: 3, mb: 1 }} component={Link} href="/auth/signup">Sign up</Button>
       </Box>
@@ -116,7 +118,7 @@ export default function Home() {
       img: '/avatar1.jpg',
       name: 'Kathy Sullivan',
       role: 'Farmer, Kurunegala',
-      text: 'GovConnect made it so easy to book appointments and get my farming documents approved. The reminders are a lifesaver!',
+      text: 'AgriLink made it so easy to book appointments and get my farming documents approved. The reminders are a lifesaver!',
     },
     {
       img: '/avatar2.jpg',
@@ -175,10 +177,10 @@ export default function Home() {
   // Footer Links
   const footerLinks = [
     {
-      title: 'About GovConnect',
+      title: 'About AgriLink',
       content: (
         <>
-          GovConnect Sri Lanka is a unified platform for citizens to access government services efficiently.
+          AgriLink Sri Lanka is a unified platform for citizens to access government services efficiently.
           Building bridges between citizens and government services.
         </>
       ),
@@ -214,7 +216,7 @@ export default function Home() {
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, sm: 64 }, px: { xs: 1, sm: 2 } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-              <AgricultureIcon width={50} height={28} alt="GovConnect Logo" />
+              <AgricultureIcon width={50} height={28} alt="AgriLink Logo" />
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2, flexGrow: 1, justifyContent: 'center' }}>
               {['Home', 'Feature', 'Testimonial', 'Contact'].map((label, i) => (
@@ -301,7 +303,7 @@ export default function Home() {
                   <Image src={img} alt={name} width={64} height={64} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 </Box>
                 <Box sx={{ fontSize: 40, color: '#B0BEC5', mb: 2, mt: 4, textAlign: 'center' }}>“</Box>
-                <Typography sx={{ color: '#333', mb: 3, fontStyle: 'italic', textAlign: 'center', fontSize: '1.1rem' }}>"{text}"</Typography>
+                <Typography sx={{ color: '#333', mb: 3, fontStyle: 'italic', textAlign: 'center', fontSize: '1.1rem' }}>{text}</Typography>
                 <Typography sx={{ fontWeight: 700, color: '#388E3C', textAlign: 'center', fontSize: '1.05rem' }}>{name}</Typography>
                 <Typography variant="body2" sx={{ color: '#7E7E7E', textAlign: 'center', mb: 1 }}>{role}</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, gap: 0.5 }}>
@@ -395,7 +397,7 @@ export default function Home() {
             ))}
           </Box>
           <Typography variant="body2" align="center" sx={{ mt: 4, color: '#7E7E7E' }}>
-            © 2025 GovConnect Sri Lanka. All rights reserved.
+            © 2025 AgriLink Sri Lanka. All rights reserved.
           </Typography>
         </Container>
       </Box>
