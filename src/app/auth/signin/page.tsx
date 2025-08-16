@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import MuiToast from "@/app/components/main/MuiToast";
 import {
   Box,
@@ -28,10 +29,10 @@ import {
   PersonAdd,
   Login
 } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -39,6 +40,25 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'info' as "info" | "success" | "error" | "warning" });
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    // Check if user just registered
+    const registered = searchParams.get('registered');
+    const newUser = sessionStorage.getItem('newUser');
+    
+    if (registered === 'true' && newUser) {
+      const userData = JSON.parse(newUser);
+      setFormData(prev => ({ ...prev, email: userData.email }));
+      setShowWelcome(true);
+      setToast({ 
+        open: true, 
+        message: `Welcome ${userData.name}! Your account has been created successfully. Please sign in.`, 
+        severity: 'success' 
+      });
+      sessionStorage.removeItem('newUser');
+    }
+  }, [searchParams]);
 
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -60,27 +80,74 @@ export default function SignInPage() {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setToast({ open: true, message: 'Please enter a valid email address', severity: 'error' });
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { 
+          "Content-Type": "application/json",
+        },
+        credentials: 'include', // Important for cookies
+        body: JSON.stringify({
+          email: formData.email.toLowerCase().trim(),
+          password: formData.password
+        }),
       });
+      
       const data = await res.json();
+      
       if (!res.ok) {
-        setToast({ open: true, message: data.error || 'Invalid credentials. Please try again.', severity: 'error' });
+        // Handle specific error cases
+        switch (res.status) {
+          case 401:
+            setToast({ open: true, message: data.error || 'Invalid email or password', severity: 'error' });
+            break;
+          case 403:
+            setToast({ open: true, message: 'Account is deactivated. Please contact support.', severity: 'error' });
+            break;
+          case 400:
+            setToast({ open: true, message: data.error || 'Invalid request', severity: 'error' });
+            break;
+          default:
+            setToast({ open: true, message: data.error || 'Login failed. Please try again.', severity: 'error' });
+        }
       } else {
-        setToast({ open: true, message: data.message || 'Login successful.', severity: 'success' });
+        setToast({ open: true, message: data.message || 'Login successful! Redirecting...', severity: 'success' });
+        
+        // Store user data in localStorage for client-side access
+        if (data.user && data.token) {
+          localStorage.setItem('user', JSON.stringify({
+            id: data.user.id,
+            firstName: data.user.firstName,
+            lastName: data.user.lastName,
+            email: data.user.email,
+            userType: data.user.userType
+          }));
+          localStorage.setItem('token', data.token);
+        }
+        
+        // Redirect based on user type
         setTimeout(() => {
-          if (data.user && data.user.email === 'officer@agrilink.com') {
+          if (data.user?.userType === 'officer') {
             router.push('/officer');
+          } else if (data.user?.userType === 'farmer') {
+            router.push('/dashboard');
           } else {
+            // Fallback routing
             router.push('/dashboard');
           }
-        }, 1000);
+        }, 1500);
       }
-    } catch {
-      setToast({ open: true, message: 'Server error. Please try again.', severity: 'error' });
+    } catch (error) {
+      console.error('Login error:', error);
+      setToast({ open: true, message: 'Network error. Please check your connection and try again.', severity: 'error' });
     } finally {
       setLoading(false);
     }
@@ -212,6 +279,15 @@ export default function SignInPage() {
                 />
               </Stack>
             </Box>
+
+            {/* Welcome message for new users */}
+            {showWelcome && (
+              <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>
+                <Typography variant="body2">
+                  <strong>Registration Successful!</strong> Your account has been created. Please sign in to continue.
+                </Typography>
+              </Alert>
+            )}
 
             {/* Demo Credentials */}
             <Alert severity="info" sx={{ mb: 3, borderRadius: 2 }}>

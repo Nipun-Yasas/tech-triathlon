@@ -34,9 +34,9 @@ const FarmerSchema: Schema = new Schema({
     unique: true
   },
   farmLocation: {
-    address: { type: String, required: true },
-    district: { type: String, required: true },
-    province: { type: String, required: true },
+    address: { type: String, default: '' },
+    district: { type: String, default: '' },
+    province: { type: String, default: '' },
     coordinates: {
       latitude: { type: Number },
       longitude: { type: Number }
@@ -44,22 +44,21 @@ const FarmerSchema: Schema = new Schema({
   },
   farmSize: {
     type: Number,
-    required: true,
+    default: 0,
     min: 0
   },
   cropTypes: [{
-    type: String,
-    required: true
+    type: String
   }],
   farmingExperience: {
     type: Number,
-    required: true,
+    default: 0,
     min: 0
   },
   governmentId: {
     type: String,
-    required: true,
-    unique: true
+    default: '',
+    sparse: true // Allow multiple empty strings, but ensure uniqueness for non-empty values
   },
   bankDetails: {
     accountNumber: String,

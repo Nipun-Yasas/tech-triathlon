@@ -8,6 +8,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ScienceIcon from '@mui/icons-material/Science';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const OFFICER_NAVIGATION: Navigation = [
   
@@ -51,6 +52,11 @@ const OFFICER_NAVIGATION: Navigation = [
   },
   {
     kind: 'divider',
+  },
+  {
+    segment: 'officer/profile',
+    title: 'Profile',
+    icon: <AccountCircleIcon />,
   },
   {
     segment: 'officer/settings',
