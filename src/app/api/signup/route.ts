@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 		await dbConnect();
 		
 		const body = await req.json();
-		const { firstName, lastName, email, password, confirmPassword, userType, phone } = body;
+		const { firstName, lastName, email, password, confirmPassword, userType, phone, farmData } = body;
 
 		// Validate required fields
 		const validationError = validateRequired(body, ['firstName', 'lastName', 'email', 'password', 'confirmPassword']);
@@ -29,6 +29,23 @@ export async function POST(req: NextRequest) {
 		// Validate password strength
 		if (password.length < 6) {
 			return apiError("Password must be at least 6 characters long", 400);
+		}
+
+		// Additional validation for farmers
+		if (userType === 'farmer' && farmData) {
+			const { farmLocation, farmSize, farmingExperience, governmentId } = farmData;
+			if (!farmLocation?.province || !farmLocation?.district || !farmLocation?.address) {
+				return apiError("Please provide complete farm location details", 400);
+			}
+			if (!farmSize || farmSize <= 0) {
+				return apiError("Please provide a valid farm size", 400);
+			}
+			if (!farmingExperience || farmingExperience < 0) {
+				return apiError("Please provide farming experience", 400);
+			}
+			if (!governmentId?.trim()) {
+				return apiError("Please provide a valid government ID", 400);
+			}
 		}
 
 		// Check if user already exists
@@ -57,43 +74,55 @@ export async function POST(req: NextRequest) {
 		if (userType === 'farmer') {
 			const farmer = new Farmer({
 				userId: user._id,
-				farmLocation: {
+				farmLocation: farmData ? {
+					address: farmData.farmLocation.address,
+					district: farmData.farmLocation.district,
+					province: farmData.farmLocation.province
+				} : {
 					address: '',
 					district: '',
 					province: ''
 				},
-				farmSize: 0,
+				farmSize: farmData?.farmSize || 0,
 				cropTypes: [],
-				farmingExperience: 0,
-				governmentId: '',
+				farmingExperience: farmData?.farmingExperience || 0,
+				governmentId: farmData?.governmentId || '',
 				isVerified: false
 			});
 			await farmer.save();
 		} else if (userType === 'officer') {
-			const officer = new Officer({
-				userId: user._id,
-				employeeId: '',
-				department: 'Agriculture',
-				designation: '',
-				assignedDistricts: [],
-				assignedProvinces: [],
-				workLocation: {
-					office: '',
-					address: '',
-					district: '',
-					province: ''
-				},
-				specializations: [],
-				qualifications: [],
-				experience: 0,
-				contactInfo: {
-					email: email,
-					mobilePhone: phone || '',
-					officePhone: ''
-				},
-				isActive: true
-			});
-			await officer.save();
+			try {
+				const officer = new Officer({
+					userId: user._id,
+					employeeId: '',
+					department: 'Agriculture',
+					designation: '',
+					assignedDistricts: [],
+					assignedProvinces: [],
+					workLocation: {
+						office: '',
+						address: '',
+						district: '',
+						province: ''
+					},
+					specializations: [],
+					qualifications: [],
+					experience: 0,
+					contactInfo: {
+						email: email,
+						mobilePhone: phone || '',
+						officePhone: ''
+					},
+					isActive: true
+				});
+				await officer.save();
+			} catch (officerError: unknown) {
+				console.error('Officer creation error:', officerError);
+				// Clean up user if officer creation fails
+				await User.findByIdAndDelete(user._id);
+				const errorMessage = officerError instanceof Error ? officerError.message : 'Unknown error';
+				return apiError(`Officer profile creation failed: ${errorMessage}`, 500);
+			}
 		}
 
 		// Generate JWT token

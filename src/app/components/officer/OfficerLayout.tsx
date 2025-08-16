@@ -5,8 +5,9 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { createTheme } from '@mui/material/styles';
-import { Button } from '@mui/material';
+import { Box } from '@mui/material';
 import OFFICER_NAVIGATION from '../../utils/officerNavigation';
+import UserMenu from '../main/UserMenu';
 
 // Officer-specific theme
 const officerTheme = createTheme({
@@ -159,48 +160,14 @@ export default function OfficerLayout({ children }: OfficerLayoutProps) {
       <DashboardLayout
         slots={{
           toolbarActions: () => (
-            <div style={{ 
+            <Box style={{ 
               display: 'flex', 
               alignItems: 'center', 
               gap: '12px',
               color: '#1976d2'
             }}>
-              <Button
-                component="a"
-                href="/dashboard"
-                variant="outlined"
-                size="small"
-                sx={{
-                  borderColor: '#4CAF50',
-                  color: '#4CAF50',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  '&:hover': {
-                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                    borderColor: '#4CAF50'
-                  }
-                }}
-              >
-                👨‍🌾 Citizen Portal
-              </Button>
-              <span style={{ fontSize: '14px', fontWeight: '500' }}>
-                Officer Dashboard
-              </span>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                backgroundColor: '#1976d2',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '14px',
-                fontWeight: 'bold'
-              }}>
-                👮‍♂️
-              </div>
-            </div>
+              <UserMenu />
+            </Box>
           ),
         }}
       >

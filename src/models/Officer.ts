@@ -2,23 +2,23 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IOfficer extends Document {
   userId: mongoose.Types.ObjectId;
-  employeeId: string;
+  employeeId?: string; // Make optional
   department: string;
-  designation: string;
-  assignedDistricts: string[];
-  assignedProvinces: string[];
-  workLocation: {
-    office: string;
-    address: string;
-    district: string;
-    province: string;
+  designation?: string; // Make optional
+  assignedDistricts?: string[]; // Make optional
+  assignedProvinces?: string[]; // Make optional
+  workLocation?: { // Make optional
+    office?: string;
+    address?: string;
+    district?: string;
+    province?: string;
   };
   specializations: string[];
   qualifications: string[];
-  experience: number; // in years
+  experience?: number; // Make optional
   contactInfo: {
-    officePhone: string;
-    mobilePhone: string;
+    officePhone?: string;
+    mobilePhone?: string;
     email: string;
   };
   profileImage?: string;
@@ -36,8 +36,8 @@ const OfficerSchema: Schema = new Schema({
   },
   employeeId: {
     type: String,
-    required: true,
-    unique: true
+    default: '',
+    sparse: true // Only enforce uniqueness if value exists and not empty
   },
   department: {
     type: String,
@@ -46,28 +46,29 @@ const OfficerSchema: Schema = new Schema({
   },
   designation: {
     type: String,
-    required: true
+    default: ''
   },
-  assignedDistricts: [{
-    type: String,
-    required: true
-  }],
-  assignedProvinces: [{
-    type: String,
-    required: true
-  }],
+  assignedDistricts: {
+    type: [String],
+    default: []
+  },
+  assignedProvinces: {
+    type: [String], 
+    default: []
+  },
   workLocation: {
-    office: { type: String, required: true },
-    address: { type: String, required: true },
-    district: { type: String, required: true },
-    province: { type: String, required: true }
+    office: { type: String, default: '' },
+    address: { type: String, default: '' },
+    district: { type: String, default: '' },
+    province: { type: String, default: '' }
   },
   specializations: [String],
   qualifications: [String],
   experience: {
     type: Number,
-    required: true,
-    min: 0
+    required: false, // Make optional during registration
+    min: 0,
+    default: 0
   },
   contactInfo: {
     officePhone: String,
