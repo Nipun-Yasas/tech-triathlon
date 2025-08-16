@@ -7,14 +7,17 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Image from 'next/image';
 // Use MUI SvgIcon for custom SVG, or use next/image for static images in /public
-function AgricultureIcon(props: Omit<React.ComponentProps<typeof Image>, 'src'>) {
+function AgricultureIcon(props: Omit<React.ComponentProps<typeof Image>, 'src' | 'width' | 'height' | 'alt'> & { width?: number; height?: number; alt?: string }) {
+  // Always provide default width, height, and alt to avoid hydration mismatch
+  const { width = 50, height = 50, alt = "GovConnect Logo", style, ...rest } = props;
   return (
     <Image
       src="/logo.svg"
-      width={props.width ?? 50}
-      height={props.height ?? 50}
-      {...props}
-      style={{ display: 'inline-block', verticalAlign: 'middle', ...props.style }}
+      width={width}
+      height={height}
+      alt={alt}
+      style={{ display: 'inline-block', verticalAlign: 'middle', ...(style || {}) }}
+      {...rest}
     />
   );
 }
