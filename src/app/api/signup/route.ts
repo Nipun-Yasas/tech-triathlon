@@ -91,30 +91,38 @@ export async function POST(req: NextRequest) {
 			});
 			await farmer.save();
 		} else if (userType === 'officer') {
-			const officer = new Officer({
-				userId: user._id,
-				employeeId: '',
-				department: 'Agriculture',
-				designation: '',
-				assignedDistricts: [],
-				assignedProvinces: [],
-				workLocation: {
-					office: '',
-					address: '',
-					district: '',
-					province: ''
-				},
-				specializations: [],
-				qualifications: [],
-				experience: 0,
-				contactInfo: {
-					email: email,
-					mobilePhone: phone || '',
-					officePhone: ''
-				},
-				isActive: true
-			});
-			await officer.save();
+			try {
+				const officer = new Officer({
+					userId: user._id,
+					employeeId: '',
+					department: 'Agriculture',
+					designation: '',
+					assignedDistricts: [],
+					assignedProvinces: [],
+					workLocation: {
+						office: '',
+						address: '',
+						district: '',
+						province: ''
+					},
+					specializations: [],
+					qualifications: [],
+					experience: 0,
+					contactInfo: {
+						email: email,
+						mobilePhone: phone || '',
+						officePhone: ''
+					},
+					isActive: true
+				});
+				await officer.save();
+			} catch (officerError: unknown) {
+				console.error('Officer creation error:', officerError);
+				// Clean up user if officer creation fails
+				await User.findByIdAndDelete(user._id);
+				const errorMessage = officerError instanceof Error ? officerError.message : 'Unknown error';
+				return apiError(`Officer profile creation failed: ${errorMessage}`, 500);
+			}
 		}
 
 		// Generate JWT token

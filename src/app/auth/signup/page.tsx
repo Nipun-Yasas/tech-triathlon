@@ -152,10 +152,24 @@ export default function SignUpPage() {
     }
 
     // Phone validation (if provided)
-    if (formData.phone && formData.phone.length > 0) {
-      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-      if (!phoneRegex.test(formData.phone.replace(/[\s\-\(\)]/g, ''))) {
-        return 'Please enter a valid phone number';
+    if (formData.phone && formData.phone.trim().length > 0) {
+      // Remove all non-digit characters except +
+      const cleanPhone = formData.phone.replace(/[\s\-\(\)\.]/g, '');
+      
+      // Check for various valid phone number formats
+      const phonePatterns = [
+        /^\+?\d{7,15}$/, // International format with optional +, 7-15 digits
+        /^\d{3}\-?\d{3}\-?\d{4}$/, // US format: 123-456-7890 or 1234567890
+        /^\(\d{3}\)\s?\d{3}\-?\d{4}$/, // US format: (123) 456-7890
+        /^\+1\d{10}$/, // US international: +11234567890
+        /^\+94\d{9}$/, // Sri Lanka: +94xxxxxxxxx
+        /^0\d{9}$/, // Local Sri Lanka: 0xxxxxxxxx
+      ];
+      
+      const isValidPhone = phonePatterns.some(pattern => pattern.test(cleanPhone));
+      
+      if (!isValidPhone && cleanPhone.length < 7) {
+        return 'Please enter a valid phone number (at least 7 digits)';
       }
     }
 
@@ -457,7 +471,8 @@ export default function SignUpPage() {
                     borderRadius: 2,
                   }
                 }}
-                placeholder="Enter your phone number"
+                placeholder="e.g., +94712345678, 0712345678, or (123) 456-7890"
+                helperText="Optional: Enter your phone number in any format"
               />
 
               {/* User Type */}

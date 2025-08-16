@@ -16,9 +16,10 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "next/link";
+import { useAuth } from "@/lib/authClient";
 
 const UserMenu: React.FC = () => {
-  
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -30,7 +31,10 @@ const UserMenu: React.FC = () => {
     setAnchorEl(null);
   };
 
-
+  const handleLogout = async () => {
+    handleCloseMenu();
+    await logout();
+  };
 
   return (
     <Stack direction="row" spacing={2} alignItems="center">
@@ -50,7 +54,7 @@ const UserMenu: React.FC = () => {
               fontWeight: 700,
             }}
           >
-            
+            {user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}` : 'U'}
           </Avatar>
           <Typography
             variant="body1"
@@ -58,7 +62,7 @@ const UserMenu: React.FC = () => {
             fontFamily="'Poppins-Medium', Helvetica"
             fontWeight={500}
           >
-            
+            {user ? `${user.firstName} ${user.lastName}` : 'User'}
           </Typography>
           <KeyboardArrowDownIcon
             sx={{
@@ -117,7 +121,7 @@ const UserMenu: React.FC = () => {
 
         <Divider sx={{ my: 1 }} />
 
-        <MenuItem sx={{ color: "#e80a4d" }}>
+        <MenuItem onClick={handleLogout} sx={{ color: "#e80a4d" }}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" sx={{ color: "#e80a4d" }} />
           </ListItemIcon>
