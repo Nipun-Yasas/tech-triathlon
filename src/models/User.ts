@@ -36,7 +36,6 @@ const UserSchema: Schema<IUser> = new Schema(
 );
 
 // Index for faster queries
-UserSchema.index({ email: 1 });
 UserSchema.index({ userType: 1, isActive: 1 });
 
 export const User: Model<IUser> =

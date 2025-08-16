@@ -100,4 +100,4 @@ const DocumentSchema: Schema = new Schema({
 DocumentSchema.index({ title: 'text', description: 'text', tags: 1 });
 DocumentSchema.index({ uploadedBy: 1, category: 1 });
 
-export const Document = mongoose.models.Document || mongoose.model<IDocument>('Document', DocumentSchema);
+export const DocumentModel = mongoose.models.Document || mongoose.model<IDocument>('Document', DocumentSchema);

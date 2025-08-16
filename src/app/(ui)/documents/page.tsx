@@ -47,6 +47,7 @@ interface UploadedFile {
   category: string;
   uploadDate: Date;
   preview?: string;
+  originalFile: File;
 }
 
 interface DocumentCategory {
@@ -207,6 +208,7 @@ export default function DocumentUpload() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Simulate initial loading
   React.useEffect(() => {
@@ -237,7 +239,8 @@ export default function DocumentUpload() {
         progress: 0,
         category: category,
         uploadDate: new Date(),
-        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
+        originalFile: file,
       };
 
       setUploadedFiles(prev => [...prev, newFile]);
@@ -298,13 +301,41 @@ export default function DocumentUpload() {
     setUploadedFiles(prev => prev.filter(f => f.id !== fileId));
   };
 
-  const handleSubmitAll = () => {
+  // Submit all successfully uploaded files to the backend
+  const handleSubmitAll = async () => {
     setIsProcessing(true);
-    // Simulate processing time
-    setTimeout(() => {
-      setIsProcessing(false);
+    setUploadError(null);
+    try {
+      // Only submit files that are not already uploaded (status === 'success')
+      const filesToSubmit = uploadedFiles.filter(f => f.status === 'success');
+      for (const file of filesToSubmit) {
+        // Prepare FormData
+        const formData = new FormData();
+        formData.append('file', file.originalFile);
+        formData.append('title', file.name);
+        formData.append('description', file.name); // You can customize this
+        formData.append('category', file.category);
+        formData.append('type', file.type);
+        formData.append('visibility', 'private');
+
+        const res = await fetch('/api/documents', {
+          method: 'POST',
+          body: formData,
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+      }
       setShowSuccess(true);
-    }, 3000);
+    } catch (err) {
+      if (err instanceof Error) {
+        setUploadError(err.message || 'Failed to upload documents');
+      } else {
+        setUploadError('Failed to upload documents');
+      }
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const CategoryUploadZone = ({ category }: { category: DocumentCategory }) => {
@@ -884,7 +915,7 @@ export default function DocumentUpload() {
             <Button
               variant="contained"
               size="large"
-              disabled={!requiredCategoriesComplete}
+              disabled={!requiredCategoriesComplete || isProcessing}
               onClick={handleSubmitAll}
               startIcon={<CloudDoneIcon />}
               sx={{
@@ -907,6 +938,10 @@ export default function DocumentUpload() {
             >
               🚀 Submit All Documents
             </Button>
+      {/* Show upload error if any */}
+      {uploadError && (
+        <Box sx={{ color: 'red', textAlign: 'center', mt: 2 }}>{uploadError}</Box>
+      )}
             
             <Button
               variant="outlined"
