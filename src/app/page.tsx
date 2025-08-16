@@ -9,6 +9,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Image from 'next/image';
+import OfficerPortalButton from './components/auth/OfficerPortalButton';
+import ClientThemeProvider from './components/ClientThemeProvider';
 
 // Logo/Image Icon
 function AgricultureIcon({ width = 50, height = 50, alt = "GovConnect Logo", style, ...rest }: any) {
@@ -59,7 +61,19 @@ function MobileNav() {
           <Button key={href} component={Link} href={href} sx={{ color: '#333', justifyContent: 'flex-start', mb: 1 }}>{label}</Button>
         ))}
         <Button sx={{ color: '#333333', textTransform: 'none', mb: 1 }}>US ↓</Button>
-        <Button sx={{ color: '#1976D2', textTransform: 'none', border: '1px solid #1976D2', px: 2, fontWeight: 500, borderRadius: 2, mb: 1 }} component={Link} href="/officer">🏛️ Officer Portal</Button>
+        <OfficerPortalButton 
+          variant="outlined"
+          sx={{ 
+            color: '#1976D2', 
+            textTransform: 'none', 
+            border: '1px solid #1976D2', 
+            px: 2, 
+            fontWeight: 500, 
+            borderRadius: 2, 
+            mb: 1,
+            width: '100%'
+          }}
+        />
         <Button sx={{ color: '#4CAF50', textTransform: 'none', mb: 1 }} component={Link} href="/auth/signin">Login</Button>
         <Button variant="contained" sx={{ backgroundColor: '#4CAF50', color: 'white', textTransform: 'none', fontWeight: 600, borderRadius: 2, px: 3, mb: 1 }} component={Link} href="/auth/signup">Sign up</Button>
       </Box>
@@ -193,7 +207,8 @@ export default function Home() {
   ];
 
   return (
-    <Box component="main">
+    <ClientThemeProvider>
+      <Box component="main">
       {/* AppBar */}
       <AppBar position="fixed" elevation={0} color="transparent" sx={{ backgroundColor: '#fff', borderBottom: '2px solid black', boxShadow: 'none', zIndex: 1201 }}>
         <Container maxWidth="lg">
@@ -208,7 +223,18 @@ export default function Home() {
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5, ml: 2 }}>
               <Button sx={{ color: '#333333', textTransform: 'none' }}>US ↓</Button>
-              <Button sx={{ color: '#1976D2', textTransform: 'none', border: '1px solid #1976D2', px: 2, fontWeight: 500, borderRadius: 2, '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.1)' } }} component={Link} href="/officer">🏛️ Officer Portal</Button>
+              <OfficerPortalButton 
+                variant="outlined"
+                sx={{ 
+                  color: '#1976D2', 
+                  textTransform: 'none', 
+                  border: '1px solid #1976D2', 
+                  px: 2, 
+                  fontWeight: 500, 
+                  borderRadius: 2, 
+                  '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.1)' }
+                }}
+              />
               <Button sx={{ color: '#4CAF50', textTransform: 'none' }} component={Link} href="/auth/signin">Login</Button>
               <Button variant="contained" sx={{ backgroundColor: '#4CAF50', color: 'white', textTransform: 'none', fontWeight: 600, borderRadius: 2, px: 3, '&:hover': { backgroundColor: '#388E3C' } }} component={Link} href="/auth/signup">Sign up</Button>
             </Box>
@@ -374,5 +400,6 @@ export default function Home() {
         </Container>
       </Box>
     </Box>
+    </ClientThemeProvider>
   );
 }
