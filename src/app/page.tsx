@@ -245,7 +245,7 @@ export default function Home() {
       </Box>
       {/* Features Section */}
       <Container
-        maxWidth=" 0"
+        maxWidth={false}
         sx={{
           py: { xs: 6, md: 10 },
            background: 'linear-gradient(90deg, #fff 0%, #A5D6A7 100%)',
